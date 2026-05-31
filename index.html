@@ -16,20 +16,29 @@
         .screen.active { display: block; }
         .section-title { font-size: 16px; font-weight: bold; margin-bottom: 12px; display: flex; align-items: center; gap: 5px; }
         .stories-container { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; }
-        .story { min-width: 70px; height: 70px; background: #eee; border-radius: 50%; border: 3px solid #FF9800; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; }
-        .card { background: #fff; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; overflow: hidden; border: 1px solid #eee; }
+        .story { min-width: 70px; height: 70px; background: #eee; border-radius: 50%; border: 3px solid #FF9800; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; cursor: pointer; }
+        .card { background: #fff; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; overflow: hidden; border: 1px solid #eee; cursor: pointer; transition: transform 0.2s; }
+        .card:active { transform: scale(0.98); }
         .card-img { height: 140px; background: #1A237E; color: #fff; display: flex; justify-content: center; align-items: center; font-size: 40px; }
         .card-body { padding: 12px; }
         .card-title { font-size: 14px; font-weight: bold; margin-bottom: 6px; }
         .card-meta { display: flex; justify-content: space-between; font-size: 12px; color: #777; }
         .badge { background: #FFF3E0; color: #E65100; padding: 2px 8px; border-radius: 20px; font-weight: bold; }
-        .nav-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 60px; background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; }
+        .nav-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 60px; background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; z-index: 10; }
         .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #888; cursor: pointer; text-decoration: none; }
         .nav-item.active { color: #1A237E; font-weight: bold; }
         .nav-item svg { width: 22px; height: 22px; margin-bottom: 2px; fill: currentColor; }
         .rest-row { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; }
         .rest-thumb { width: 70px; height: 70px; background: #FFF8E1; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; }
         .map-box { height: 400px; background: #E8EAF6; border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #5C6BC0; text-align: center; padding: 20px; border: 2px dashed #9FA8DA; }
+        
+        /* تصميم صفحة التفاصيل المنبثقة الحية */
+        .details-modal { position: absolute; bottom: -100%; left: 0; width: 100%; height: 85%; background: #fff; border-top-left-radius: 30px; border-top-right-radius: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.15); z-index: 20; transition: bottom 0.3s ease; padding: 20px; display: flex; flex-direction: column; }
+        .details-modal.open { bottom: 0; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .modal-close { font-size: 24px; cursor: pointer; color: #888; }
+        .modal-content { flex: 1; overflow-y: auto; }
+        .action-button { background: #1A237E; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 14px; width: 100%; margin-top: 15px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -37,7 +46,7 @@
 <div class="phone-container">
     <div class="app-bar">
         <div class="app-title" id="bar-title">فعاليات السويدي</div>
-        <div style="font-size: 20px;">🔔</div>
+        <div style="font-size: 20px; cursor: pointer;" onclick="alert('لا توجد إشعارات جديدة حالياً')">🔔</div>
     </div>
 
     <div class="content-area">
@@ -45,13 +54,13 @@
         <div id="screen-home" class="screen active">
             <div class="section-title">عاجل في السويدي 🔥</div>
             <div class="stories-container">
-                <div class="story">افتتاح 🍔</div>
-                <div class="story">عرض اليوم</div>
-                <div class="story">مباشر 🎭</div>
-                <div class="story">حديقة 🌴</div>
+                <div class="story" onclick="openDetails('برجر السويدي الفاخر', 'افتتاح فرع جديد الليلة وعروض خاصة خصم 50% للزوار!', '🍔')">افتتاح 🍔</div>
+                <div class="story" onclick="openDetails('مقهى الأصالة', 'خصم خاص لمتابعّي التطبيق على القهوة المقطرة طوال اليوم.', '☕')">عرض اليوم</div>
+                <div class="story" onclick="openDetails('فعاليات حديقة السويدي', 'انطلاق العروض الفلكلورية الحية الآن على المسرح الرئيسي.', '🎭')">مباشر 🎭</div>
+                <div class="story" onclick="openDetails('حديقة السويدي', 'تحديث: توفر مواقف سيارات إضافية في الجهة الغربية.', '🌴')">حديقة 🌴</div>
             </div>
             <div class="section-title">مقترح لك اليوم ✨</div>
-            <div class="card">
+            <div class="card" onclick="openDetails('فعاليات حديقة السويدي الثقافية', 'استمتع بأجمل الأمسيات الثقافية والفنية المفتوحة للعائلات والأفراد بحديقة السويدي العريقة. تضم الفعالية عروضاً فلكلورية، ومناطق ترفيهية للأطفال، وأكشاك للأطعمة المحلية المتميزة.', '🌴', '🕒 4:00 م - 11:00 م', '🔥 مزدحم جزئياً')">
                 <div class="card-img">🌴</div>
                 <div class="card-body">
                     <div class="card-title">فعاليات حديقة السويدي الثقافية</div>
@@ -66,7 +75,7 @@
         <!-- شاشة المطاعم -->
         <div id="screen-restaurants" class="screen">
             <div class="section-title">أبرز مطاعم ومقاهي الحي 🍽️</div>
-            <div class="card rest-row">
+            <div class="card rest-row" onclick="openDetails('برجر السويدي الفاخر', 'يقدم ألذ أنواع البرجر المشوي عالحطب باللحم البلدي الطازج يومياً. يتميز بجلسات شبابية وعائلية مريحة في قلب حي السويدي بشارع عائشة بنت أبي بكر.', '🍔', '🕒 1:00 م - 2:00 ص', '⭐ 4.8')">
                 <div class="rest-thumb">🍔</div>
                 <div>
                     <div class="card-title" style="margin-bottom:2px;">برجر السويدي الفاخر</div>
@@ -74,7 +83,7 @@
                     <div style="font-size:12px;">⭐ 4.8 (📍 1.2 كم)</div>
                 </div>
             </div>
-            <div class="card rest-row">
+            <div class="card rest-row" onclick="openDetails('مقهى ومحمصة الأصالة', 'المكان المثالي لعشاق القهوة المختصة والهدوء. يوفر بيئة رائعة للعمل أو الدراسة مع تشكيلة واسعة من الحلويات الطازجة والمخبوزات المتميزة.', '☕', '🕒 6:00 ص - 12:00 منتصف الليل', '⭐ 4.5')">
                 <div class="rest-thumb">☕</div>
                 <div>
                     <div class="card-title" style="margin-bottom:2px;">مقهى ومحمصة الأصالة</div>
@@ -87,13 +96,13 @@
         <!-- شاشة الفعاليات -->
         <div id="screen-events" class="screen">
             <div class="section-title">روزنامة الفعاليات القادمة 📅</div>
-            <div class="card">
+            <div class="card" onclick="openDetails('الأمسية الفنية المفتوحة', 'أمسية ثقافية مميزة تجمع فناني ومبدعي الحي لاستعراض أعمالهم الفنية وعروضهم الحية أمام الجمهور. الدخول مجاني ويتطلب تسجيلاً مسبقاً عبر التطبيق.', '🎭', '📅 الجمعة القادم - 8:00 م', '📍 مسرح اللجنة الاجتماعية')">
                 <div class="card-body">
                     <div class="card-title">🎭 الأمسية الفنية المفتوحة</div>
                     <div style="font-size:12px; color:#666;">يوم الجمعة القادم - مسرح اللجنة الاجتماعية</div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" onclick="openDetails('معرض الخط العربي للشباب', 'معرض فني يبرز جماليات الخط العربي الأصيل بأيادي شبابية واعدة من حي السويدي والمناطق المجاورة. يتضمن المعرض ورش عمل حية ومسابقات تفاعلية.', '🎨', '📅 مستمر لثلاثة أيام', '📍 جاليري السويدي')">
                 <div class="card-body">
                     <div class="card-title">🎨 معرض الخط العربي للشباب</div>
                     <div style="font-size:12px; color:#666;">مستمر لثلاثة أيام - جاليري السويدي</div>
@@ -108,6 +117,20 @@
                 <div class="card-title">خريطة السويدي التفاعلية</div>
                 <div style="font-size:12px; margin-top:5px;">جاري تحديد معالم الجذب والمطاعم القريبة منك...</div>
             </div>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل منبثقة ذكية -->
+    <div id="details-modal" class="details-modal">
+        <div class="modal-header">
+            <div class="app-title" id="modal-title">اسم الفعالية</div>
+            <div class="modal-close" onclick="closeDetails()">✕</div>
+        </div>
+        <div class="modal-content">
+            <div id="modal-icon" style="font-size: 60px; text-align: center; margin: 15px 0;">🌴</div>
+            <div id="modal-meta" style="margin-bottom: 15px; font-size: 13px; color: #E65100; font-weight: bold; text-align: center;"></div>
+            <p id="modal-desc" style="font-size: 14px; line-height: 1.6; color: #555; text-align: justify;"></p>
+            <button class="action-button" onclick="alert('تم تفعيل الميزة! سيتم توجيهك الآن للموقع أو الحجز الجغرافي.')">الانتقال إلى الموقع (لوكيشن) 📍</button>
         </div>
     </div>
 
@@ -133,12 +156,28 @@
 </div>
 
 <script>
+    // التنقل بين الشاشات الرئيسية
     function switchScreen(screenId, title, element) {
+        closeDetails(); // إغلاق أي نافذة مفتوحة تلقائياً عند التنقل
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         document.getElementById('screen-' + screenId).classList.add('active');
         document.getElementById('bar-title').innerText = title;
         element.classList.add('active');
+    }
+
+    // فتح نافذة تفاصيل العنصر الديناميكية
+    function openDetails(title, desc, icon, meta1 = '', meta2 = '') {
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-desc').innerText = desc;
+        document.getElementById('modal-icon').innerText = icon;
+        document.getElementById('modal-meta').innerText = meta1 + (meta2 ? ' • ' + meta2 : '');
+        document.getElementById('details-modal').classList.add('open');
+    }
+
+    // إغلاق نافذة التفاصيل
+    function closeDetails() {
+        document.getElementById('details-modal').classList.remove('open');
     }
 </script>
 </body>
