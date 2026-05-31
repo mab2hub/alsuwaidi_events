@@ -3,152 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق فعاليات السويدي</title>
+    <title>تطبيق فعاليات السويدي المتكامل</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        /* الأساسيات ونظام العرض الهيكلي للمحاكي */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
-        body { background-color: #F8F9FA; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .phone-container { width: 375px; height: 750px; background: #fff; border: 12px solid #222; border-radius: 40px; position: relative; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-        .app-bar { background: #fff; padding: 20px 15px 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
-        .app-title { font-size: 18px; font-weight: bold; color: #1A237E; }
-        .content-area { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 70px; }
-        .screen { display: none; }
-        .screen.active { display: block; }
-        .section-title { font-size: 16px; font-weight: bold; margin-bottom: 12px; display: flex; align-items: center; gap: 5px; }
-        .stories-container { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; }
-        .story { min-width: 70px; height: 70px; background: #eee; border-radius: 50%; border: 3px solid #FF9800; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; cursor: pointer; }
-        .card { background: #fff; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; overflow: hidden; border: 1px solid #eee; cursor: pointer; transition: transform 0.2s; }
-        .card:active { transform: scale(0.98); }
-        .card-img { height: 140px; background: #1A237E; color: #fff; display: flex; justify-content: center; align-items: center; font-size: 40px; }
-        .card-body { padding: 12px; }
-        .card-title { font-size: 14px; font-weight: bold; margin-bottom: 6px; }
-        .card-meta { display: flex; justify-content: space-between; font-size: 12px; color: #777; }
-        .badge { background: #FFF3E0; color: #E65100; padding: 2px 8px; border-radius: 20px; font-weight: bold; }
-        .nav-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 60px; background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; z-index: 10; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #888; cursor: pointer; text-decoration: none; }
-        .nav-item.active { color: #1A237E; font-weight: bold; }
-        .nav-item svg { width: 22px; height: 22px; margin-bottom: 2px; fill: currentColor; }
-        .rest-row { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; }
-        .rest-thumb { width: 70px; height: 70px; background: #FFF8E1; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; }
-        .map-box { height: 400px; background: #E8EAF6; border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #5C6BC0; text-align: center; padding: 20px; border: 2px dashed #9FA8DA; }
+        body { background-color: #F4F6F9; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         
-        /* تصميم صفحة التفاصيل المنبثقة الحية */
-        .details-modal { position: absolute; bottom: -100%; left: 0; width: 100%; height: 85%; background: #fff; border-top-left-radius: 30px; border-top-right-radius: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.15); z-index: 20; transition: bottom 0.3s ease; padding: 20px; display: flex; flex-direction: column; }
+        /* إطار الهاتف الذكي العصري */
+        .phone-container { width: 375px; height: 780px; background: #fff; border: 12px solid #1e1e1e; border-radius: 40px; position: relative; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.25); }
+        
+        /* شريط التطبيق العلوي */
+        .app-bar { background: #fff; padding: 25px 16px 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; z-index: 5; }
+        .app-title { font-size: 18px; font-weight: 700; color: #1A237E; }
+        .noti-icon { font-size: 20px; cursor: pointer; transition: transform 0.2s; }
+        .noti-icon:active { transform: scale(0.9); }
+        
+        /* مساحة المحتوى الرئيسية والتصفح الزمني */
+        .content-area { flex: 1; overflow-y: auto; padding-bottom: 70px; position: relative; background: #FAFBFD; }
+        .screen { display: none; padding: 16px; }
+        .screen.active { display: block; }
+        
+        /* العناوين والتقسيمات الجزئية (Modular Sections) */
+        .section-title { font-size: 15px; font-weight: 700; color: #2C3E50; margin: 8px 0 12px 0; display: flex; align-items: center; gap: 6px; }
+        
+        /* شريط الأخبار العاجلة (Stories) */
+        .stories-container { display: flex; gap: 12px; overflow-x: auto; padding: 4px 0 12px 0; margin-bottom: 16px; scrollbar-width: none; }
+        .stories-container::-webkit-scrollbar { display: none; }
+        .story-wrapper { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: bold; color: #555; cursor: pointer; }
+        .story { width: 68px; height: 68px; background: #fff; border-radius: 50%; border: 3px solid #FF9800; display: flex; justify-content: center; align-items: center; font-size: 24px; box-shadow: 0 3px 6px rgba(0,0,0,0.05); }
+        
+        /* أزرار الفلترة السريعة المودرن */
+        .filter-bar { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 16px; padding-bottom: 4px; scrollbar-width: none; }
+        .filter-bar::-webkit-scrollbar { display: none; }
+        .filter-btn { background: #E8EAF6; color: #283593; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; border: none; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+        .filter-btn.active { background: #1A237E; color: #fff; }
+        
+        /* بطاقات العرض النظيفة ذات الحواف الدائرية (Cards) */
+        .card { background: #fff; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 16px; overflow: hidden; border: 1px solid #f0f0f0; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .card:active { transform: scale(0.98); }
+        .card-img { height: 135px; background: linear-gradient(135deg, #1A237E, #3F51B5); color: #fff; display: flex; justify-content: center; align-items: center; font-size: 45px; }
+        .card-body { padding: 14px; }
+        .card-title { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 6px; }
+        .card-meta { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #666; }
+        .badge { background: #FFF3E0; color: #E65100; padding: 2px 10px; border-radius: 12px; font-weight: 700; font-size: 11px; }
+        
+        /* القائمة المسطحة للأفقيات (List Rows) */
+        .list-row { display: flex; gap: 12px; padding: 12px; align-items: center; }
+        .list-thumb { width: 64px; height: 64px; background: #FFF8E1; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 26px; flex-shrink: 0; }
+        .list-details { flex: 1; }
+        
+        /* حاوية الخريطة الذكية */
+        .map-wrapper { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+        .map-wrapper iframe { width: 100%; height: 100%; border: 0; }
+        
+        /* لوحة التفاصيل المنبثقة التفاعلية (Details Modal) */
+        .details-modal { position: absolute; bottom: -100%; left: 0; width: 100%; height: 85%; background: #fff; border-top-left-radius: 28px; border-top-right-radius: 28px; box-shadow: 0 -8px 32px rgba(0,0,0,0.18); z-index: 20; transition: bottom 0.3s cubic-bezier(0.1, 0.8, 0.2, 1); padding: 20px; display: flex; flex-direction: column; }
         .details-modal.open { bottom: 0; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
-        .modal-close { font-size: 24px; cursor: pointer; color: #888; }
-        .modal-content { flex: 1; overflow-y: auto; }
-        .action-button { background: #1A237E; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 14px; width: 100%; margin-top: 15px; cursor: pointer; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
+        .modal-close { font-size: 22px; cursor: pointer; color: #999; padding: 4px; }
+        .modal-content { flex: 1; overflow-y: auto; padding-right: 2px; }
+        .modal-icon-banner { font-size: 55px; text-align: center; margin: 12px 0; background: #F5F6FA; padding: 15px; border-radius: 16px; }
+        .modal-info-tag { background: #E8EAF6; color: #1A237E; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 12px; }
+        .action-button { background: #1A237E; color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 13px; width: 100%; margin-top: 15px; cursor: pointer; box-shadow: 0 4px 12px rgba(26, 35, 126, 0.2); transition: background 0.2s; }
+        .action-button:active { background: #0D1440; }
+        
+        /* شريط التنقل السفلي المودرن (Navigation Bar) */
+        .nav-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 64px; background: #fff; border-top: 1px solid #eaeaea; display: flex; justify-content: space-around; align-items: center; z-index: 10; padding-bottom: 4px; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #8e8e93; cursor: pointer; text-decoration: none; gap: 3px; font-weight: bold; width: 20%; }
+        .nav-item.active { color: #1A237E; }
+        .nav-item svg { width: 23px; height: 23px; fill: currentColor; transition: transform 0.2s; }
+        .nav-item:active svg { transform: scale(0.9); }
     </style>
 </head>
 <body>
 
 <div class="phone-container">
+    <!-- البار العلوي ثابت لكل الصفحات -->
     <div class="app-bar">
         <div class="app-title" id="bar-title">فعاليات السويدي</div>
-        <div style="font-size: 20px; cursor: pointer;" onclick="alert('لا توجد إشعارات جديدة حالياً')">🔔</div>
+        <div class="noti-icon" onclick="alert('💡 تنبيه: تم إضافة فعالية جديدة في حديقة السويدي قبل قليل!')">🔔</div>
     </div>
 
+    <!-- مساحة التبديل البرمجي بين الخدمات -->
     <div class="content-area">
-        <!-- شاشة الرئيسية -->
+        
+        <!-- 1. شاشة الخدمة الرئيسية -->
         <div id="screen-home" class="screen active">
             <div class="section-title">عاجل في السويدي 🔥</div>
             <div class="stories-container">
-                <div class="story" onclick="openDetails('برجر السويدي الفاخر', 'افتتاح فرع جديد الليلة وعروض خاصة خصم 50% للزوار!', '🍔')">افتتاح 🍔</div>
-                <div class="story" onclick="openDetails('مقهى الأصالة', 'خصم خاص لمتابعّي التطبيق على القهوة المقطرة طوال اليوم.', '☕')">عرض اليوم</div>
-                <div class="story" onclick="openDetails('فعاليات حديقة السويدي', 'انطلاق العروض الفلكلورية الحية الآن على المسرح الرئيسي.', '🎭')">مباشر 🎭</div>
-                <div class="story" onclick="openDetails('حديقة السويدي', 'تحديث: توفر مواقف سيارات إضافية في الجهة الغربية.', '🌴')">حديقة 🌴</div>
+                <div class="story-wrapper" onclick="openDetails('برجر السويدي الفاخر', 'افتتاح فرع شارع عائشة الليلة! عروض حصرية وخصم 50% لأول 100 زائر من مستخدمي التطبيق.', '🍔', '🕒 اليوم بدءاً من الساعة 8 مساءً', '📍 شارع عائشة بنت أبي بكر')">
+                    <div class="story">🍔</div><span>افتتاح جديد</span>
+                </div>
+                <div class="story-wrapper" onclick="openDetails('مقهى ومحمصة الأصالة', 'خصم خاص وحصري لمتابعي تطبيق فعاليات السويدي: اشتري قهوة اليوم واحصل على قطعة حلى مجاناً.', '☕', '🕒 طوال اليوم', '⭐ عرض حصري')">
+                    <div class="story">☕</div><span>عروض حية</span>
+                </div>
+                <div class="story-wrapper" onclick="openDetails('منصة مسرح السويدي', 'بدء العرض الترفيهي الحي المخصص للعائلات والأطفال على المسرح المكشوف بحديقة السويدي الآن.', '🎭', '🕒 مستمر حتى 10 م', '🔥 مباشر الآن')">
+                    <div class="story">🎭</div><span>مباشر الآن</span>
+                </div>
+                <div class="story-wrapper" onclick="openDetails('مواقف حديقة السويدي', 'تنبيه بلدي: تم افتتاح الساحة الغربية كإضافة لمواقف السيارات لتسهيل دخول زوار الفعاليات الثقافية.', '🌴', '🕒 تحديث فوري', '🚗 إرشاد مروري')">
+                    <div class="story">🌴</div><span>تحديث عام</span>
+                </div>
             </div>
-            <div class="section-title">مقترح لك اليوم ✨</div>
-            <div class="card" onclick="openDetails('فعاليات حديقة السويدي الثقافية', 'استمتع بأجمل الأمسيات الثقافية والفنية المفتوحة للعائلات والأفراد بحديقة السويدي العريقة. تضم الفعالية عروضاً فلكلورية، ومناطق ترفيهية للأطفال، وأكشاك للأطعمة المحلية المتميزة.', '🌴', '🕒 4:00 م - 11:00 م', '🔥 مزدحم جزئياً')">
-                <div class="card-img">🌴</div>
+            
+            <div class="section-title">مقترح مخصص لك اليوم ✨</div>
+            <div class="card" onclick="openDetails('فعاليات حديقة السويدي الثقافية', 'استمتع بأجمل الأمسيات الثقافية والفنية المفتوحة للعائلات والأفراد بحديقة السويدي العريقة بالرياض. تضم الفعالية حزمة عروض فلكلورية حية، مناطق ترفيهية متكاملة للأطفال، وأكشاك لأبرز الأطعمة والمنتجات المحلية المتميزة داخل الحي.', '🕌', '🕒 4:00 م - 11:00 م', '🔥 الازدحام: متوسط')">
+                <div class="card-img" style="background: linear-gradient(135deg, #1B5E20, #4CAF50);">🕌</div>
                 <div class="card-body">
                     <div class="card-title">فعاليات حديقة السويدي الثقافية</div>
                     <div class="card-meta">
                         <span>🕒 4:00 م - 11:00 م</span>
-                        <span class="badge">🔥 مزدحم جزئياً</span>
+                        <span class="badge">🔥 متوسط الازدحام</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- شاشة المطاعم -->
+        <!-- 2. شاشة دليل المطاعم والمقاهي (مع أزرار الفلترة) -->
         <div id="screen-restaurants" class="screen">
-            <div class="section-title">أبرز مطاعم ومقاهي الحي 🍽️</div>
-            <div class="card rest-row" onclick="openDetails('برجر السويدي الفاخر', 'يقدم ألذ أنواع البرجر المشوي عالحطب باللحم البلدي الطازج يومياً. يتميز بجلسات شبابية وعائلية مريحة في قلب حي السويدي بشارع عائشة بنت أبي بكر.', '🍔', '🕒 1:00 م - 2:00 ص', '⭐ 4.8')">
-                <div class="rest-thumb">🍔</div>
-                <div>
-                    <div class="card-title" style="margin-bottom:2px;">برجر السويدي الفاخر</div>
-                    <div style="font-size:11px; color:#777; margin-bottom:5px;">وجبات سريعة • شارع عائشة</div>
-                    <div style="font-size:12px;">⭐ 4.8 (📍 1.2 كم)</div>
-                </div>
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filterItems('all')">الكل 🍽️</button>
+                <button class="filter-btn" onclick="filterItems('fastfood')">وجبات سريعة 🍔</button>
+                <button class="filter-btn" onclick="filterItems('cafe')">مقاهي ☕</button>
+                <button class="filter-btn" onclick="filterItems('family')">عوائل 👨‍👩‍👧‍👦</button>
             </div>
-            <div class="card rest-row" onclick="openDetails('مقهى ومحمصة الأصالة', 'المكان المثالي لعشاق القهوة المختصة والهدوء. يوفر بيئة رائعة للعمل أو الدراسة مع تشكيلة واسعة من الحلويات الطازجة والمخبوزات المتميزة.', '☕', '🕒 6:00 ص - 12:00 منتصف الليل', '⭐ 4.5')">
-                <div class="rest-thumb">☕</div>
-                <div>
-                    <div class="card-title" style="margin-bottom:2px;">مقهى ومحمصة الأصالة</div>
-                    <div style="font-size:11px; color:#777; margin-bottom:5px;">قهوة مختصة • حيوية وهادئة</div>
-                    <div style="font-size:12px;">⭐ 4.5 (📍 0.8 كم)</div>
+            
+            <div id="restaurants-list">
+                <div class="card list-row filter-item fastfood">
+                    <div class="list-thumb">🍔</div>
+                    <div class="list-details" onclick="openDetails('برجر السويدي الفاخر', 'يقدم تشكيلة من البرجر المشوي على الحطب باللحوم المحلية الطازجة. يتميز بالخدمة السريعة والجلسات الأنيقة المناسبة للجميع.', '🍔', '🕒 1:00 م - 2:00 ص', '⭐ 4.8 (📍 1.2 كم)')">
+                        <div class="card-title">برجر السويدي الفاخر</div>
+                        <div style="font-size:11px; color:#777; margin-bottom:4px;">وجبات سريعة • شارع عائشة الرئيسي</div>
+                        <div style="font-size:12px;">⭐ 4.8 (📍 1.2 كم)</div>
+                    </div>
+                </div>
+
+                <div class="card list-row filter-item cafe">
+                    <div class="list-thumb">☕</div>
+                    <div class="list-details" onclick="openDetails('مقهى ومحمصة الأصالة', 'المكان الأفضل والأنسب لعشاق القهوة المختصة الهادئة. بيئة ممتازة ومجهزة بالكامل للعمل، الدراسة، أو القراءة مع تشكيلة حلى يومية طازجة.', '☕', '🕒 6:00 ص - 12:00 ليلاً', '⭐ 4.5 (📍 0.8 كم)')">
+                        <div class="card-title">مقهى ومحمصة الأصالة</div>
+                        <div style="font-size:11px; color:#777; margin-bottom:4px;">قهوة مختصة • أجواء هادئة للعمل</div>
+                        <div style="font-size:12px;">⭐ 4.5 (📍 0.8 كم)</div>
+                    </div>
+                </div>
+
+                <div class="card list-row filter-item family">
+                    <div class="list-thumb">🍲</div>
+                    <div class="list-details" onclick="openDetails('مطعم ومطبخ الضيافة', 'يقدم أعرق الأكلات الشعبية والمطبوخة بالطرق التقليدية الأصيلة. يتميز بخصوصية تامة وقسم عوائل مستقل ومجهز بالكامل والمناسب للمجموعات الكبيرة.', '🍲', '🕒 11:00 ص - 12:00 ليلاً', '⭐ 4.3 (📍 2.1 كم)')">
+                        <div class="card-title">مطعم ومطبخ الضيافة الريفية</div>
+                        <div style="font-size:11px; color:#777; margin-bottom:4px;">مأكولات شعبية • قسم عوائل مستقل وخاص</div>
+                        <div style="font-size:12px;">⭐ 4.3 (📍 2.1 كم)</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- شاشة الفعاليات -->
+        <!-- 3. شاشة روزنامة وأجندة الفعاليات الثقافية والفنية -->
         <div id="screen-events" class="screen">
-            <div class="section-title">روزنامة الفعاليات القادمة 📅</div>
-            <div class="card" onclick="openDetails('الأمسية الفنية المفتوحة', 'أمسية ثقافية مميزة تجمع فناني ومبدعي الحي لاستعراض أعمالهم الفنية وعروضهم الحية أمام الجمهور. الدخول مجاني ويتطلب تسجيلاً مسبقاً عبر التطبيق.', '🎭', '📅 الجمعة القادم - 8:00 م', '📍 مسرح اللجنة الاجتماعية')">
+            <div class="section-title">الأجندة والأنشطة المتاحة القادمة 📅</div>
+            
+            <div class="card" onclick="openDetails('الأمسية الفنية المفتوحة في الحي', 'لقاء ومجلس ثقافي وفني دوري يجمع مبدعي وفناني حي السويدي لعرض أعمالهم التشكيلية وتبادل الخبرات الفنية أمام زوار المجتمع المحلي. يتخلل الفعالية عروض موسيقية وشعرية أصيلة.', '🎭', '📅 الجمعة القادم - الساعة 8:00 مساءً', '📍 مسرح اللجنة الاجتماعية لحي السويدي')">
                 <div class="card-body">
-                    <div class="card-title">🎭 الأمسية الفنية المفتوحة</div>
-                    <div style="font-size:12px; color:#666;">يوم الجمعة القادم - مسرح اللجنة الاجتماعية</div>
+                    <div class="card-title">🎭 الأمسية الفنية المفتوحة للحي</div>
+                    <div style="font-size:12px; color:#666; margin-top:4px; line-height:1.4;">ملتقى يجمع المبدعين والفنانين التشكيليين لعرض مواهبهم وأعمالهم الحية مباشرة.</div>
+                    <div style="font-size:11px; color:#1A237E; margin-top:8px; font-weight:bold;">📅 الجمعة القادم • 📍 مسرح اللجنة الاجتماعية</div>
                 </div>
             </div>
-            <div class="card" onclick="openDetails('معرض الخط العربي للشباب', 'معرض فني يبرز جماليات الخط العربي الأصيل بأيادي شبابية واعدة من حي السويدي والمناطق المجاورة. يتضمن المعرض ورش عمل حية ومسابقات تفاعلية.', '🎨', '📅 مستمر لثلاثة أيام', '📍 جاليري السويدي')">
+
+            <div class="card" onclick="openDetails('معرض الخط العربي التفاعلي للشباب', 'معرض نوعي وثقافي يهدف لإبراز جماليات الخط العربي والفنون الإسلامية بأيادي جيل الشباب الواعد. يتضمن المعرض جلسات تدريبية قصيرة ومسابقات فورية للجمهور.', '🎨', '📅 مستمر لمدة ثلاثة أيام متتالية', '📍 جاليري ومكتبة السويدي العامة')">
                 <div class="card-body">
-                    <div class="card-title">🎨 معرض الخط العربي للشباب</div>
-                    <div style="font-size:12px; color:#666;">مستمر لثلاثة أيام - جاليري السويدي</div>
+                    <div class="card-title">🎨 معرض الخط العربي التفاعلي للشباب</div>
+                    <div style="font-size:12px; color:#666; margin-top:4px; line-height:1.4;">استكشف لوحات مميزة مع ورش عمل حية ومسابقات خط فورية وتفاعلية لكافة الأعمار.</div>
+                    <div style="font-size:11px; color:#1A237E; margin-top:8px; font-weight:bold;">📅 مستمر لـ 3 أيام • 📍 جاليري السويدي العام</div>
                 </div>
             </div>
         </div>
 
-        <!-- شاشة الخريطة -->
+        <!-- 4. شاشة الخريطة التفاعلية الجغرافية المدمجة (Google Maps) -->
         <div id="screen-map" class="screen">
-            <div class="map-box">
-                <div style="font-size:50px; margin-bottom:10px;">📍</div>
-                <div class="card-title">خريطة السويدي التفاعلية</div>
-                <div style="font-size:12px; margin-top:5px;">جاري تحديد معالم الجذب والمطاعم القريبة منك...</div>
+            <div class="map-wrapper">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14505.776662485552!2d46.64963505!3d24.6428383!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f056ca01ad5a7%3A0x6b30f7be52bbf9fa!2sSuwaidi%20Park!5e0!3m2!1sar!2ssa!4v1710000000000!5m2!1sar!2ssa" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
             </div>
         </div>
     </div>
 
-    <!-- نافذة تفاصيل منبثقة ذكية -->
+    <!-- لوحة عرض تفاصيل العناصر المنبثقة التفاعلية (Modal) -->
     <div id="details-modal" class="details-modal">
         <div class="modal-header">
-            <div class="app-title" id="modal-title">اسم الفعالية</div>
+            <div class="app-title" id="modal-title">تفاصيل الخدمة</div>
             <div class="modal-close" onclick="closeDetails()">✕</div>
         </div>
         <div class="modal-content">
-            <div id="modal-icon" style="font-size: 60px; text-align: center; margin: 15px 0;">🌴</div>
-            <div id="modal-meta" style="margin-bottom: 15px; font-size: 13px; color: #E65100; font-weight: bold; text-align: center;"></div>
-            <p id="modal-desc" style="font-size: 14px; line-height: 1.6; color: #555; text-align: justify;"></p>
-            <button class="action-button" onclick="alert('تم تفعيل الميزة! سيتم توجيهك الآن للموقع أو الحجز الجغرافي.')">الانتقال إلى الموقع (لوكيشن) 📍</button>
+            <div id="modal-icon" class="modal-icon-banner">📍</div>
+            <div style="text-align: center;">
+                <div id="modal-meta" class="modal-info-tag">معلومات أساسية</div>
+            </div>
+            <p id="modal-desc" style="font-size: 13.5px; line-height: 1.6; color: #4A5568; text-align: justify; margin: 8px 0;"></p>
+            <button class="action-button" onclick="alert('🗺️ ميزة الملاحة الحية: سيتم تفعيل جهازك الآن للربط التلقائي عبر الـ GPS والتوجيه المباشر للمكان!')">الانتقال إلى الموقع الجغرافي للخدمة 📍</button>
         </div>
     </div>
 
-    <!-- شريط التنقل السفلي -->
+    <!-- شريط القائمة السفلي الثابت (Tabs) -->
     <div class="nav-bar">
         <div class="nav-item active" onclick="switchScreen('home', 'فعاليات السويدي', this)">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
             <span>الرئيسية</span>
         </div>
-        <div class="nav-item" onclick="switchScreen('restaurants', 'مطاعم السويدي', this)">
+        <div class="nav-item" onclick="switchScreen('restaurants', 'دليل مطاعم السويدي', this)">
             <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.86 3.75 3.97V22h2.5v-9.03C11.34 12.86 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
             <span>المطاعم</span>
         </div>
-        <div class="nav-item" onclick="switchScreen('events', 'روزنامة الفعاليات', this)">
+        <div class="nav-item" onclick="switchScreen('events', 'روزنامة الأنشطة', this)">
             <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
             <span>الفعاليات</span>
         </div>
-        <div class="nav-item" onclick="switchScreen('map', 'خريطة الحي', this)">
+        <div class="nav-item" onclick="switchScreen('map', 'خريطة السويدي الحية', this)">
             <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
             <span>الخريطة</span>
         </div>
@@ -156,17 +230,18 @@
 </div>
 
 <script>
-    // التنقل بين الشاشات الرئيسية
+    // 1. نظام التبديل بين التبويبات والشاشات الرئيسية
     function switchScreen(screenId, title, element) {
-        closeDetails(); // إغلاق أي نافذة مفتوحة تلقائياً عند التنقل
+        closeDetails(); // إغلاق لوحة التفاصيل تلقائياً عند تغيير الصفحة
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        
         document.getElementById('screen-' + screenId).classList.add('active');
         document.getElementById('bar-title').innerText = title;
         element.classList.add('active');
     }
 
-    // فتح نافذة تفاصيل العنصر الديناميكية
+    // 2. نظام تشغيل العرض المنبثق التفاعلي وتعبئة البيانات ديناميكياً
     function openDetails(title, desc, icon, meta1 = '', meta2 = '') {
         document.getElementById('modal-title').innerText = title;
         document.getElementById('modal-desc').innerText = desc;
@@ -175,9 +250,25 @@
         document.getElementById('details-modal').classList.add('open');
     }
 
-    // إغلاق نافذة التفاصيل
     function closeDetails() {
         document.getElementById('details-modal').classList.remove('open');
+    }
+
+    // 3. نظام فرز وفلترة المطاعم والمقاهي (Filtering)
+    function filterItems(category) {
+        // تغيير حالة الزر النشط في التصفح
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        // عرض أو إخفاء العناصر بناء على الفئة المختارة
+        const items = document.querySelectorAll('.filter-item');
+        items.forEach(item => {
+            if (category === 'all' || item.classList.contains(category)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
     }
 </script>
 </body>
