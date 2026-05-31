@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق فعاليات السويدي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+        body { background-color: #F8F9FA; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .phone-container { width: 375px; height: 750px; background: #fff; border: 12px solid #222; border-radius: 40px; position: relative; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .app-bar { background: #fff; padding: 20px 15px 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
+        .app-title { font-size: 18px; font-weight: bold; color: #1A237E; }
+        .content-area { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 70px; }
+        .screen { display: none; }
+        .screen.active { display: block; }
+        .section-title { font-size: 16px; font-weight: bold; margin-bottom: 12px; display: flex; align-items: center; gap: 5px; }
+        .stories-container { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; }
+        .story { min-width: 70px; height: 70px; background: #eee; border-radius: 50%; border: 3px solid #FF9800; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: bold; }
+        .card { background: #fff; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; overflow: hidden; border: 1px solid #eee; }
+        .card-img { height: 140px; background: #1A237E; color: #fff; display: flex; justify-content: center; align-items: center; font-size: 40px; }
+        .card-body { padding: 12px; }
+        .card-title { font-size: 14px; font-weight: bold; margin-bottom: 6px; }
+        .card-meta { display: flex; justify-content: space-between; font-size: 12px; color: #777; }
+        .badge { background: #FFF3E0; color: #E65100; padding: 2px 8px; border-radius: 20px; font-weight: bold; }
+        .nav-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 60px; background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #888; cursor: pointer; text-decoration: none; }
+        .nav-item.active { color: #1A237E; font-weight: bold; }
+        .nav-item svg { width: 22px; height: 22px; margin-bottom: 2px; fill: currentColor; }
+        .rest-row { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #eee; }
+        .rest-thumb { width: 70px; height: 70px; background: #FFF8E1; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; }
+        .map-box { height: 400px; background: #E8EAF6; border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #5C6BC0; text-align: center; padding: 20px; border: 2px dashed #9FA8DA; }
+    </style>
+</head>
+<body>
+
+<div class="phone-container">
+    <div class="app-bar">
+        <div class="app-title" id="bar-title">فعاليات السويدي</div>
+        <div style="font-size: 20px;">🔔</div>
+    </div>
+
+    <div class="content-area">
+        <!-- شاشة الرئيسية -->
+        <div id="screen-home" class="screen active">
+            <div class="section-title">عاجل في السويدي 🔥</div>
+            <div class="stories-container">
+                <div class="story">افتتاح 🍔</div>
+                <div class="story">عرض اليوم</div>
+                <div class="story">مباشر 🎭</div>
+                <div class="story">حديقة 🌴</div>
+            </div>
+            <div class="section-title">مقترح لك اليوم ✨</div>
+            <div class="card">
+                <div class="card-img">🌴</div>
+                <div class="card-body">
+                    <div class="card-title">فعاليات حديقة السويدي الثقافية</div>
+                    <div class="card-meta">
+                        <span>🕒 4:00 م - 11:00 م</span>
+                        <span class="badge">🔥 مزدحم جزئياً</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- شاشة المطاعم -->
+        <div id="screen-restaurants" class="screen">
+            <div class="section-title">أبرز مطاعم ومقاهي الحي 🍽️</div>
+            <div class="card rest-row">
+                <div class="rest-thumb">🍔</div>
+                <div>
+                    <div class="card-title" style="margin-bottom:2px;">برجر السويدي الفاخر</div>
+                    <div style="font-size:11px; color:#777; margin-bottom:5px;">وجبات سريعة • شارع عائشة</div>
+                    <div style="font-size:12px;">⭐ 4.8 (📍 1.2 كم)</div>
+                </div>
+            </div>
+            <div class="card rest-row">
+                <div class="rest-thumb">☕</div>
+                <div>
+                    <div class="card-title" style="margin-bottom:2px;">مقهى ومحمصة الأصالة</div>
+                    <div style="font-size:11px; color:#777; margin-bottom:5px;">قهوة مختصة • حيوية وهادئة</div>
+                    <div style="font-size:12px;">⭐ 4.5 (📍 0.8 كم)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- شاشة الفعاليات -->
+        <div id="screen-events" class="screen">
+            <div class="section-title">روزنامة الفعاليات القادمة 📅</div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">🎭 الأمسية الفنية المفتوحة</div>
+                    <div style="font-size:12px; color:#666;">يوم الجمعة القادم - مسرح اللجنة الاجتماعية</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">🎨 معرض الخط العربي للشباب</div>
+                    <div style="font-size:12px; color:#666;">مستمر لثلاثة أيام - جاليري السويدي</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- شاشة الخريطة -->
+        <div id="screen-map" class="screen">
+            <div class="map-box">
+                <div style="font-size:50px; margin-bottom:10px;">📍</div>
+                <div class="card-title">خريطة السويدي التفاعلية</div>
+                <div style="font-size:12px; margin-top:5px;">جاري تحديد معالم الجذب والمطاعم القريبة منك...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- شريط التنقل السفلي -->
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="switchScreen('home', 'فعاليات السويدي', this)">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>الرئيسية</span>
+        </div>
+        <div class="nav-item" onclick="switchScreen('restaurants', 'مطاعم السويدي', this)">
+            <svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.86 3.75 3.97V22h2.5v-9.03C11.34 12.86 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>
+            <span>المطاعم</span>
+        </div>
+        <div class="nav-item" onclick="switchScreen('events', 'روزنامة الفعاليات', this)">
+            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            <span>الفعاليات</span>
+        </div>
+        <div class="nav-item" onclick="switchScreen('map', 'خريطة الحي', this)">
+            <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+            <span>الخريطة</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchScreen(screenId, title, element) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('screen-' + screenId).classList.add('active');
+        document.getElementById('bar-title').innerText = title;
+        element.classList.add('active');
+    }
+</script>
+</body>
+</html>
