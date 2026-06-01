@@ -75,6 +75,10 @@
         .nav-item svg { width: 23px; height: 23px; fill: currentColor; transition: transform 0.2s; }
         .nav-item:active svg { transform: scale(0.9); }
     </style>
+    
+    <!-- خطوتنا البرمجية المضافة: استدعاء حزم سكريبت Firebase لتهيئة الاتصال بجوجل -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -129,6 +133,7 @@
             </div>
             
             <div id="restaurants-list">
+                <!-- المطاعم الافتراضية في تصميم الكود الأساسي -->
                 <div class="card list-row filter-item fastfood">
                     <div class="list-thumb">🍔</div>
                     <div class="list-details" onclick="openDetails('برجر السويدي الفاخر', 'يقدم تشكيلة من البرجر المشوي على الحطب باللحوم المحلية الطازجة. يتميز بالخدمة السريعة والجلسات الأنيقة المناسبة للجميع.', '🍔', '🕒 1:00 م - 2:00 ص', '⭐ 4.8 (📍 1.2 كم)')">
@@ -230,6 +235,51 @@
 </div>
 
 <script>
+    // وضعت كود الـ Firebase الحقيقي والربط البرمجي هنا بداخل وسم الـ script
+    const firebaseConfig = {
+      apiKey: "AIzaSyBRTrfvLJLTQkVajDBIhbQDluQE_vHWAHY",
+      authDomain: "alsuwaidi-events.firebaseapp.com",
+      projectId: "alsuwaidi-events",
+      storageBucket: "alsuwaidi-events.firebasestorage.app",
+      messagingSenderId: "457293614288",
+      appId: "1:457293614288:web:549dc94008d23692baa2d5",
+      measurementId: "G-NQYW5F2RG2"
+    };
+
+    // تهيئة واستدعاء قاعدة بيانات معتز الحية
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // دالة جلب المطاعم ديناميكياً من الفايربيز وإدراجها بالواجهة
+    function loadLiveRestaurants() {
+        const listContainer = document.getElementById('restaurants-list');
+        
+        db.collection("restaurants").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                
+                // إنشاء كرت تصميم مخصص لكل مطعم جديد مضاف في لوحة الفايربيز
+                const cardHTML = `
+                    <div class="card list-row filter-item ${data.category}">
+                        <div class="list-thumb">${data.icon || '🍽️'}</div>
+                        <div class="list-details" onclick="openDetails('${data.name}', '${data.desc}', '${data.icon || '🍽️'}', '${data.time || ''}', '${data.rating || ''}')">
+                            <div class="card-title">${data.name}</div>
+                            <div style="font-size:11px; color:#777; margin-bottom:4px;">${data.type}</div>
+                            <div style="font-size:12px;">${data.rating}</div>
+                        </div>
+                    </div>
+                `;
+                // إضافته إلى القائمة فوراً
+                listContainer.insertAdjacentHTML('beforeend', cardHTML);
+            });
+        }).catch((error) => {
+            console.log("خطأ في جلب بيانات المطاعم: ", error);
+        });
+    }
+
+    // تشغيل جلب البيانات بمجرد اكتمال تحميل الواجهة
+    window.addEventListener('DOMContentLoaded', loadLiveRestaurants);
+
     // 1. نظام التبديل بين التبويبات والشاشات الرئيسية
     function switchScreen(screenId, title, element) {
         closeDetails(); // إغلاق لوحة التفاصيل تلقائياً عند تغيير الصفحة
