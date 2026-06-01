@@ -132,35 +132,8 @@
                 <button class="filter-btn" onclick="filterItems('family')">عوائل 👨‍👩‍👧‍👦</button>
             </div>
             
-            <div id="restaurants-list">
-                <!-- المطاعم الافتراضية في تصميم الكود الأساسي -->
-                <div class="card list-row filter-item fastfood">
-                    <div class="list-thumb">🍔</div>
-                    <div class="list-details" onclick="openDetails('برجر السويدي الفاخر', 'يقدم تشكيلة من البرجر المشوي على الحطب باللحوم المحلية الطازجة. يتميز بالخدمة السريعة والجلسات الأنيقة المناسبة للجميع.', '🍔', '🕒 1:00 م - 2:00 ص', '⭐ 4.8 (📍 1.2 كم)')">
-                        <div class="card-title">برجر السويدي الفاخر</div>
-                        <div style="font-size:11px; color:#777; margin-bottom:4px;">وجبات سريعة • شارع عائشة الرئيسي</div>
-                        <div style="font-size:12px;">⭐ 4.8 (📍 1.2 كم)</div>
-                    </div>
-                </div>
-
-                <div class="card list-row filter-item cafe">
-                    <div class="list-thumb">☕</div>
-                    <div class="list-details" onclick="openDetails('مقهى ومحمصة الأصالة', 'المكان الأفضل والأنسب لعشاق القهوة المختصة الهادئة. بيئة ممتازة ومجهزة بالكامل للعمل، الدراسة، أو القراءة مع تشكيلة حلى يومية طازجة.', '☕', '🕒 6:00 ص - 12:00 ليلاً', '⭐ 4.5 (📍 0.8 كم)')">
-                        <div class="card-title">مقهى ومحمصة الأصالة</div>
-                        <div style="font-size:11px; color:#777; margin-bottom:4px;">قهوة مختصة • أجواء هادئة للعمل</div>
-                        <div style="font-size:12px;">⭐ 4.5 (📍 0.8 كم)</div>
-                    </div>
-                </div>
-
-                <div class="card list-row filter-item family">
-                    <div class="list-thumb">🍲</div>
-                    <div class="list-details" onclick="openDetails('مطعم ومطبخ الضيافة', 'يقدم أعرق الأكلات الشعبية والمطبوخة بالطرق التقليدية الأصيلة. يتميز بخصوصية تامة وقسم عوائل مستقل ومجهز بالكامل والمناسب للمجموعات الكبيرة.', '🍲', '🕒 11:00 ص - 12:00 ليلاً', '⭐ 4.3 (📍 2.1 كم)')">
-                        <div class="card-title">مطعم ومطبخ الضيافة الريفية</div>
-                        <div style="font-size:11px; color:#777; margin-bottom:4px;">مأكولات شعبية • قسم عوائل مستقل وخاص</div>
-                        <div style="font-size:12px;">⭐ 4.3 (📍 2.1 كم)</div>
-                    </div>
-                </div>
-            </div>
+            <!-- تم تنظيف الحاوية بالكامل وجعلها فارغة لاستقبال مطاعم الفايربيز فقط -->
+            <div id="restaurants-list"></div>
         </div>
 
         <!-- 3. شاشة روزنامة وأجندة الفعاليات الثقافية والفنية -->
@@ -235,7 +208,7 @@
 </div>
 
 <script>
-    // وضعت كود الـ Firebase الحقيقي والربط البرمجي هنا بداخل وسم الـ script
+    // إعدادات الـ Firebase الحقيقية والربط البرمجي
     const firebaseConfig = {
       apiKey: "AIzaSyBRTrfvLJLTQkVajDBIhbQDluQE_vHWAHY",
       authDomain: "alsuwaidi-events.firebaseapp.com",
