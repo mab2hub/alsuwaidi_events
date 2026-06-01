@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق فعاليات السويدي المتكامل</title>
+    <!-- 1. تعديل اسم التطبيق في شريط عنوان المتصفح والتبويبات -->
+    <title>مطاعم ومقاهي وفعاليات السويدي</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* الأساسيات ونظام العرض الهيكلي للمحاكي */
@@ -15,7 +16,7 @@
         
         /* شريط التطبيق العلوي */
         .app-bar { background: #fff; padding: 25px 16px 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; z-index: 5; }
-        .app-title { font-size: 18px; font-weight: 700; color: #1A237E; }
+        .app-title { font-size: 15px; font-weight: 700; color: #1A237E; } /* تم تعديل القياس ليناسب الاسم الجديد الطويل بصورة متناسقة */
         .noti-icon { font-size: 20px; cursor: pointer; transition: transform 0.2s; }
         .noti-icon:active { transform: scale(0.9); }
         
@@ -76,7 +77,7 @@
         .nav-item:active svg { transform: scale(0.9); }
     </style>
     
-    <!-- خطوتنا البرمجية المضافة: استدعاء حزم سكريبت Firebase لتهيئة الاتصال بجوجل -->
+    <!-- استدعاء حزم سكريبت Firebase لتهيئة الاتصال بجوجل -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
@@ -85,7 +86,8 @@
 <div class="phone-container">
     <!-- البار العلوي ثابت لكل الصفحات -->
     <div class="app-bar">
-        <div class="app-title" id="bar-title">فعاليات السويدي</div>
+        <!-- 2. تعديل اسم التطبيق الظاهر في الواجهة العلوية للهاتف -->
+        <div class="app-title" id="bar-title">مطاعم ومقاهي وفعاليات السويدي</div>
         <div class="noti-icon" onclick="alert('💡 تنبيه: تم إضافة فعالية جديدة في حديقة السويدي قبل قليل!')">🔔</div>
     </div>
 
@@ -105,7 +107,7 @@
                 <div class="story-wrapper" onclick="openDetails('منصة مسرح السويدي', 'بدء العرض الترفيهي الحي المخصص للعائلات والأطفال على المسرح المكشوف بحديقة السويدي الآن.', '🎭', '🕒 مستمر حتى 10 م', '🔥 مباشر الآن')">
                     <div class="story">🎭</div><span>مباشر الآن</span>
                 </div>
-                <div class="story-wrapper" onclick="openDetails('مواقف حديقة السويدي', 'تنبيه بلدي: تم افتتاح الساحة الغربية كإضافة لمواقف السيارات لتسهيل دخول زوار الفعاليات الثقافية.', '🌴', '🕒 تحديث فوري', '🚗 إرشاد مروري')">
+                <div class="story-wrapper" onclick="openDetails('مواقف حديقة السويدي', 'تنببه بلدي: تم افتتاح الساحة الغربية كإضافة لمواقف السيارات لتسهيل دخول زوار الفعاليات الثقافية.', '🌴', '🕒 تحديث فوري', '🚗 إرشاد مروري')">
                     <div class="story">🌴</div><span>تحديث عام</span>
                 </div>
             </div>
@@ -132,7 +134,7 @@
                 <button class="filter-btn" onclick="filterItems('family')">عوائل 👨‍👩‍👧‍👦</button>
             </div>
             
-            <!-- تم تنظيف الحاوية بالكامل وجعلها فارغة لاستقبال مطاعم الفايربيز فقط -->
+            <!-- حاوية استقبال مطاعم الفايربيز الحية فقط -->
             <div id="restaurants-list"></div>
         </div>
 
@@ -188,7 +190,7 @@
 
     <!-- شريط القائمة السفلي الثابت (Tabs) -->
     <div class="nav-bar">
-        <div class="nav-item active" onclick="switchScreen('home', 'فعاليات السويدي', this)">
+        <div class="nav-item active" onclick="switchScreen('home', 'مطاعم ومقاهي وفعاليات السويدي', this)">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
             <span>الرئيسية</span>
         </div>
